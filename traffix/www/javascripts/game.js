@@ -1138,7 +1138,9 @@ Game = {
       Game.sounds[sound].play();
 
       Game.theme_timer = setInterval(function(){ 
-          Game.sounds[sound].play(); 
+          if (!Game.muted) {
+            Game.sounds[sound].play();   
+          }
         }, 72002);
       
     } else if (Game.with_soundjs) {
