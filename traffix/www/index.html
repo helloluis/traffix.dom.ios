@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="viewport" content="width = device-width, initial-scale = 1, user-scalable = no">
+
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/apple-touch-icon-h.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/apple-touch-icon-m.png" />
+  <link rel="apple-touch-icon-precomposed" href="images/apple-touch-icon-l.png" />
+  <link rel="shortcut icon" href="images/apple-touch-icon-l.png" />
+
+  <title>Traffix!</title>
+
+  <link rel="stylesheet" href="stylesheets/game.css"/>
+ 
+  <script src="javascripts/modernizr.js"></script>
+  <script src="javascripts/underscore.js"></script>
+  <script src="javascripts/map.js"></script>
+  <script src="javascripts/sound.js"></script>
+  <script src="javascripts/loader.js"></script>
+  <script src="phonegap-1.3.0.js"></script>
+  <!--<script src="javascripts/pokkiBrowser.js"></script>-->
+  <script>
+    PLATFORM = 'ios';
+    APP_URL  = "http://traffix.infinite.ly";
+    APP_ID   = "192448444187818";
+  </script>
+
+  <style>
+  @font-face {
+  font-family: 'Fugaz One';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Fugaz One'), local('FugazOne-Regular'), url('fonts/foh--NswBHNPbRHy7yEyyLO3LdcAZYWl9Si6vvxL-qU.woff') format('woff');
+  }
+  @font-face {
+  font-family: 'Boogaloo';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Boogaloo One'), local('BoogalooOne-Regular'), url('fonts/1x_XysQB9ZwoSzu9a0nb7HYhjbSpvc47ee6xR_80Hnw.woff') format('woff');
+  }
+  </style>
+
+</head>
+
+<body>
+
+<div id="all">
+
+  <!-- <div id="fb-root"></div>
+  <script src='http://connect.facebook.net/en_US/all.js'></script> -->
+
+  <div id="debugger"></div>
+
+  <div id="loader" class="screen">
+    <h2 class='loading'>Loading</h2>
+    <h2 class='loading_percentage'>0%</h2>
+    <div id="loading_cars"></div>
+    <div id="loading_container"></div>
+    <img src="images/buildings.png" style="visibility:hidden" />
+  </div>
+
+  <div id="intro" class="screen" style="display:none">
+    <div class="screen_inner">
+      <h1>Traffix!</h1>
+
+      <div class="help">
+        
+        <div id="help_intersection" class="help_illustration help_illustration_intersection selected">
+          <div class="finger"></div>
+          <div class="stoplight horizontal"></div>      
+          <div class="help_background"></div>
+        </div>
+        
+        <div id="help_frustration" class="help_illustration help_illustration_frustration">
+          <div class="finger"></div>
+          <div class="stoplight horizontal"></div>
+          <div class="help_background"></div>
+        </div>
+        
+        <div id="help_reward" class="help_illustration help_illustration_reward">
+          <div class="help_background"></div>
+        </div>
+
+        <p class="help_caption caption_intersection">Fix that traffic problem by managing those busy intersections!</p>
+        <p class="help_caption caption_frustration">Don't let the drivers get frustrated!</p>
+        <p class="help_caption caption_reward">You get points for each car that gets safely across!</p>
+
+      </div>
+
+      <h2 class="bttn start_game">Play!</h2>
+      <h3 class="bttn credits">Credits</h3>
+      <!-- <h3 class="bttn leaderboards">Leaderboards</h3> -->
+      <div class="high_score_cont">
+        <label>High Score</label> 
+        <h3 class="high_score">0</h3>
+      </div>
+      <div class="fb-login-button" data-show-faces="true" data-width="200" data-max-rows="1"></div>
+    </div>
+  </div>
+
+  <div id="leaderboards" class="screen" style="display:none">
+    <div class="screen_inner">
+      <h1>Leaderboards</h1>
+      <p>Coming Soon!</p>
+      <h2 class="bttn intro">Back to Home</h2>
+    </div>
+  </div>
+
+  <div id="game" class="screen" style="display:none">
+
+    <div id="critical"></div>
+
+    <div id="overlay" style="display:none">
+      <h2 class="bttn resume">Resume?</h2>
+    </div>
+    
+    <h2 class="bttn mute">Mute</h2>
+    <h2 class="bttn pause">Pause</h2>
+    <h2 class="bttn quit">Quit</h2>
+    <h2 class="bttn restart">Try Again</h2>
+  
+    <div id="messages"><h1>Starting ...</h1></div>
+
+    
+    <div id="score" title="Score" style="right:-135px">0</div>
+    <div id="high_score" class="high_score" title="High Score" style="right:-135px">0</div>
+
+    <div id="map">
+      
+      <div class="neighborhood"></div>
+
+      <div class="intersection amber chang"  data-streets="amber chang"><div class='stoplight horizontal'></div></div>
+      <div class="intersection amber dexter" data-streets="amber dexter"><div class='stoplight horizontal'></div></div>
+      <div class="intersection baker chang"  data-streets="baker chang"><div class='stoplight horizontal'></div></div>
+      <div class="intersection baker dexter" data-streets="baker dexter"><div class='stoplight horizontal'></div></div>
+
+      <canvas id="cars" width="1024" height="768"></canvas>
+      <canvas id="bubbles" width="1024" height="768"></canvas>
+      
+      <div class="buildings"></div>
+
+    </div>
+    
+  </div>
+
+
+  <div id="credits" class="screen">
+    <div class="screen_inner">
+      <h1>Credits</h1>
+      <p>A traffic control game by Ryan Sumo (<a href="http://twitter.com/ryansumo" class="external">@ryansumo</a>) and Luis Buenaventura (<a href="http://twitter.com/helloluis" class="external">@helloluis</a>). Follow <a href="http://twitter.com/traffixgame" title="@TraffixGame on Twitter" class="external">@traffixgame</a> for new maps and other trafficky updates, and <a href="http://facebook.com/traffixgame" class="external">like us on Facebook</a>.</p>  
+      <h2 class="bttn intro">&larr; Back to Home</h2>
+    </div>
+  </div>
+
+</div>
+
+<script src="javascripts/jquery-1.7.1.min.js"></script>
+<script src="javascripts/jgestures.min.js"></script>
+<script src="javascripts/jquery.tappable.js"></script>
+<script src="javascripts/jstorage.js"></script>
+<script src="javascripts/jquery-timers.js"></script>
+<script src="javascripts/traffix_loader.js"></script>
+<script src="javascripts/game.js"></script>
+<script src="javascripts/help.js"></script>
+
+<script>
+
+  if (PLATFORM=='pokki') {
+    window.pauseFromPokki  = function(){ Game.pause(); Game.pause_menus(); console.log('pausing game'); };
+    window.resumeFromPokki = function(){ Game.resume_menus(); console.log('resuming game'); };  
+  }  
+
+  $(function(){
+    $("body").addClass(PLATFORM);
+    var auto_start = document.location.hash.indexOf("autostart")!==-1;
+    Game.preload(auto_start);
+  });
+</script>
+
+
+</body>
+</html>
