@@ -85,6 +85,7 @@ Game = {
   with_phonegap_sound  : true,     // we use the Phonegap sound library for iOS
   with_soundjs         : false,    // SoundJS, for Web & Pokki build
   with_sm2_sound       : false,    // SoundManager2 is what we used to use for web
+  muted                : false,
 
   sound_format         : "." + SOUND_FORMATS[PLATFORM],
  
@@ -1076,14 +1077,12 @@ Game = {
 
   mute : function(){
     $(".bttn.mute").addClass('muted').text('Un-mute');
-    Game.with_sound = false;
     Game.muted = true;
     Game.stop_all_sounds();
   },
 
   unmute : function(){
-    $(".bttn.mute").removeClass('muted').text('Mute');
-    Game.with_sound = true;
+    $(".bttn.mute").removeClass('muted').text('Mute');    
     Game.muted = false;
     SoundJS.setMute(false);
     if (Game.started) {
@@ -1109,7 +1108,7 @@ Game = {
 
     if (volume===undefined) { volume = 100; }
     
-    if (Game.with_sound) {
+    if (Game.with_sound && !Game.muted) {
       if (Game.with_phonegap_sound) {
         if (loop) {
           Game.loop_sound(sound, volume);
@@ -1151,9 +1150,8 @@ Game = {
 
   stop_sound : function(sound) {
     
-    Game.log('stopping sound', sound);
-
     if (Game.with_sound) {
+      
       if (Game.with_phonegap_sound) {
         if (sound=='theme') {
           Game.sounds[sound].stop();  
@@ -1778,7 +1776,7 @@ var Car = function(car_hash){
 
   // TODO!
   this.play_sound_loop = function(){
-    if (Game.with_sound) {
+    if (Game.with_sound && !Game.muted) {
       //console.log(this.sounds);
       Game.play_sound(this.sounds);
       if (this.interrupt_all_sounds===true) {
