@@ -1138,8 +1138,10 @@ Game = {
       Game.sounds[sound].play();
 
       Game.theme_timer = setInterval(function(){ 
-          if (!Game.muted) {
+          if (Game.started && !Game.ended && !Game.paused && !Game.muted) {
             Game.sounds[sound].play();   
+          } else {
+            Game.theme_timer.clearInterval();
           }
         }, 72002);
       

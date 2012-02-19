@@ -296,3 +296,4 @@ body.pokki .bttn.quit { display:none; }
 
 body.ios .bttn.post_to_facebook { display:none; }
 body.ios .new_high_score h2 { font-size:60px; margin-top:40px;}
+body.ios #high_score { font-size: 20px; padding-top:20px; }
